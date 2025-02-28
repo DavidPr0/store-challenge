@@ -1,26 +1,20 @@
 "use client";
 
 import React from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useProductDetail } from "@/hooks/useProductDetail";
+import Link from "next/link";
+import { deleteProduct } from "@/services/productService";
 
 export default function ProductDetailPage() {
-  const router = useRouter();
   const params = useParams();
+  const router = useRouter();
 
   const { product, loading, error } = useProductDetail(Number(params.id));
 
-  if (loading) {
-    return <div className="p-4">Carregando...</div>;
-  }
-
-  if (error) {
-    return <div className="p-4 text-red-500">{error}</div>;
-  }
-
-  if (!product) {
-    return <div className="p-4">Produto não encontrado.</div>;
-  }
+  if (loading) return <div className="p-4">Carregando...</div>;
+  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  if (!product) return <div className="p-4">Produto não encontrado.</div>;
 
   const truncatedTitle =
     product.title.length > 30
@@ -29,12 +23,27 @@ export default function ProductDetailPage() {
 
   const isHighlighted = product.rating?.rate && product.rating.rate > 4.5;
 
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      "Tem certeza que deseja excluir o produto?"
+    );
+    if (!confirmed) return;
+
+    try {
+      await deleteProduct(product?.id);
+      alert("Produto excluído com sucesso (Fake Store API)!");
+      router.push("/products");
+    } catch (err) {
+      console.error("Erro ao excluir produto:", err);
+      alert("Falha ao excluir produto.");
+    }
+  }
+
   return (
     <div className="p-4">
-      {/* Botão para voltar à tela anterior */}
       <button
         onClick={() => router.back()}
-        className="mb-4 underline text-blue-500"
+        className="underline text-blue-500 mb-4"
       >
         Voltar
       </button>
@@ -55,12 +64,29 @@ export default function ProductDetailPage() {
           Preço: <strong>${product.price}</strong>
         </p>
         <p className="mt-2 text-sm text-gray-500">{product.description}</p>
+
         {product.rating && (
           <div className="mt-2">
-            Avaliação: <strong>{product.rating.rate}</strong>
-            <span> ({product.rating.count} reviews)</span>
+            Avaliação: <strong>{product.rating.rate}</strong>{" "}
+            <span>({product.rating.count} reviews)</span>
           </div>
         )}
+      </div>
+
+      <div className="flex gap-2 mt-4">
+        <Link
+          href={`/products/${product.id}/edit`}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Editar
+        </Link>
+
+        <button
+          onClick={handleDelete}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Excluir
+        </button>
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ export const updateProduct = async (
   return response.data;
 };
 
-export const deleteProduct = async (id: number): Promise<void> => {
+export const deleteProduct = async (id?: number): Promise<void> => {
   const response = await api.delete(`/products/${id}`);
   return response.data;
 };
