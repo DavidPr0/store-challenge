@@ -3,6 +3,7 @@
 import React from "react";
 import { useProducts } from "@/hooks/useProducts";
 import ProductCard from "@/components/ProductCard";
+import Link from "next/link";
 
 export default function ProductsPage() {
   const {
@@ -30,7 +31,14 @@ export default function ProductsPage() {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Listagem de Produtos</h1>
-
+      <div className="mb-4">
+        <Link
+          href="/products/create"
+          className="inline-block bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+        >
+          Criar Novo Produto
+        </Link>
+      </div>
       <div className="flex gap-4 mb-4">
         <select
           value={category}
