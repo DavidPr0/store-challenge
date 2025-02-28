@@ -1,6 +1,12 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Loja Fake - CRUD de Produtos
 
-## Getting Started
+Este projeto demonstra um CRUD de produtos utilizando a [Fake Store API](https://fakestoreapi.com).  
+Foi desenvolvido em **Next.js (v13+)** com **TypeScript**, **Tailwind CSS**, **Axios**, **React Hook Form**, **Yup** (validação) e **Jest** (testes) — seguindo princípios **SOLID**.  
+O usuário pode **listar**, **filtrar**, **ordenar**, **criar**, **editar** (sem alterar categoria) e **excluir** produtos (com confirmação).
+
+---
+
+## Dando Início
 
 First, run the development server:
 
@@ -8,29 +14,84 @@ First, run the development server:
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra http://localhost:3000 com seu navegador para ver o resultado.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Você pode começar a editar as páginas modificando arquivos em aplicativos/produtos. A página é atualizada automaticamente conforme você edita o arquivo.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Este projeto usa next/font para otimizar e carregar automaticamente fontes personalizadas em seu aplicativo Next.js. Ele também integra Tailwind CSS para estilização.
 
-## Learn More
+# Principais recursos
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+	•	Listagem de Produtos:
+	•	Paginação e destaque para rate > 4.5.
+	•	Filtro por categorias (obtidas via Fake Store API).
+	•	Ordenação asc/desc por preço.
+	•	Título truncado em 30 caracteres.
+	•	Visualização Individual:
+	•	Página /products/[id] exibe detalhes do produto selecionado.
+	•	Criação de Produto:
+	•	Formulário em /products/create, validado por Yup e gerenciado com React Hook Form.
+	•	Edição de Produto:
+	•	Em /products/[id]/edit, não é possível alterar a categoria.
+	•	Demais campos (title, price, description, image) são validados.
+	•	Exclusão:
+	•	Só ocorre após confirmação (ex.: window.confirm ou modal).
+	•	Testes Unitários:
+	•	Jest + React Testing Library com cobertura mínima de 30%.
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Estrutura do Projeto
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+src/
+├─ app/
+│   ├─ products/
+│   │   ├─ page.tsx
+│   │   ├─ create/page.tsx
+│   │   ├─ [id]/page.tsx
+│   │   └─ [id]/edit/page.tsx
+│   ├─ layout.tsx
+│   └─ ...
+├─ components/
+│   ├─ ProductCard.tsx
+│   ├─ CreateProductForm.tsx
+│   └─ EditProductForm.tsx
+├─ hooks/
+│   ├─ useProducts.ts
+│   └─ useProductDetail.ts
+├─ services/
+│   └─ productService.ts
+├─ validations/
+│   └─ productValidation.ts
+├─ tests/
+│   ├─ components/
+│   │   └─ ProductCard.test.tsx
+│   └─ services/
+│       └─ productService.test.ts
+└─ ...
 
-## Deploy on Vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tecnologias utilizadas
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    •	TypeScript
+    •	Tailwind CSS
+    •	Axios
+    •	React Hook Form + Yup (formulários e validação)
+    •	Jest + React Testing Library (testes unitários)
+    •	SOLID design principles
+
+## Rodar Testes
+
+```bash
+npm run test
+```
+
+## Rodar Testes com Coverage
+
+```bash
+npm run test:coverage
+```
