@@ -1,4 +1,3 @@
-// app/layout.tsx
 import "./globals.css"; // <== Import do Tailwind
 
 export const metadata = {
