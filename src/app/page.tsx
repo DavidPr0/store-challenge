@@ -1,7 +1,15 @@
-export default function Page() {
+import Link from "next/link";
+
+export default function Home() {
   return (
-    <main className="p-6 bg-blue-100 text-red-500">
-      <h1 className="text-3xl font-bold">Testando Tailwind!</h1>
+    <main className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Bem-vindo à Nossa Loja!</h1>
+      <Link
+        href="/products"
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Ver Produtos
+      </Link>
     </main>
   );
 }

@@ -1,7 +1,7 @@
 import { Product } from "@/types/product";
 import api from "../config/axios";
 
-export const getProducts = async (): Promise<Product> => {
+export const getProducts = async (): Promise<Product[]> => {
   const response = await api.get(`/products`);
   return response.data;
 };
@@ -28,3 +28,8 @@ export const deleteProduct = async (id: number): Promise<void> => {
   const response = await api.delete(`/products/${id}`);
   return response.data;
 };
+
+export async function getCategories(): Promise<string[]> {
+  const response = await api.get<string[]>("/products/categories");
+  return response.data;
+}
