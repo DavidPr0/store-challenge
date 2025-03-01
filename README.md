@@ -26,8 +26,6 @@ yarn dev
 
 Abra http://localhost:3000 com seu navegador para ver o resultado.
 
-Você pode começar a editar as páginas modificando arquivos em aplicativos/produtos. A página é atualizada automaticamente conforme você edita o arquivo.
-
 Este projeto usa next/font para otimizar e carregar automaticamente fontes personalizadas em seu aplicativo Next.js. Ele também integra Tailwind CSS para estilização.
 
 ## Principais recursos
@@ -93,6 +91,7 @@ tests/
     •	React Hook Form + Yup (formulários e validação)
     •	Jest + React Testing Library (testes unitários)
     •	SOLID design principles
+    • StoryBook
 
 ## Rodar Storybook
 
