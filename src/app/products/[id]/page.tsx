@@ -1,92 +1,114 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useProductDetail } from "@/hooks/useProductDetail";
-import Link from "next/link";
-import { deleteProduct } from "@/services/productService";
+import toast from "react-hot-toast";
+
+import { deleteProduct, getProductById } from "@/services/productService";
+import { Product } from "@/types/product";
+import { Button } from "@/components/Button";
+import { ConfirmModal } from "@/components/ConfirmModal";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const { product, loading, error } = useProductDetail(Number(params.id));
+  const [error, setError] = useState("");
 
-  if (loading) return <div className="p-4">Carregando...</div>;
-  if (error) return <div className="p-4 text-red-500">{error}</div>;
-  if (!product) return <div className="p-4">Produto não encontrado.</div>;
-
-  const truncatedTitle =
-    product.title.length > 30
-      ? product.title.slice(0, 30) + "..."
-      : product.title;
-
-  const isHighlighted = product.rating?.rate && product.rating.rate > 4.5;
-
-  async function handleDelete() {
-    const confirmed = window.confirm(
-      "Tem certeza que deseja excluir o produto?"
-    );
-    if (!confirmed) return;
-
-    try {
-      await deleteProduct(product?.id);
-      alert("Produto excluído com sucesso (Fake Store API)!");
-      router.push("/products");
-    } catch (err) {
-      console.error("Erro ao excluir produto:", err);
-      alert("Falha ao excluir produto.");
+  useEffect(() => {
+    async function fetchProduct() {
+      try {
+        setLoading(true);
+        const data = await getProductById(Number(params.id));
+        setProduct(data);
+      } catch (err) {
+        setError("Erro ao carregar produto.");
+      } finally {
+        setLoading(false);
+      }
     }
+    fetchProduct();
+  }, [params.id]);
+
+  if (loading) {
+    return <div className="p-6 text-center">Carregando produto...</div>;
+  }
+  if (error || !product) {
+    return (
+      <div className="p-6 text-center text-red-500">
+        {error || "Produto não encontrado."}
+      </div>
+    );
   }
 
+  const handleDelete = async () => {
+    try {
+      await deleteProduct(product.id);
+      toast.success("Produto excluído (FakeStore).");
+      router.push("/products");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao excluir produto.");
+    }
+  };
   return (
-    <div className="p-4">
+    <div className="container mx-auto p-6">
       <button
         onClick={() => router.back()}
-        className="underline text-blue-500 mb-4"
+        className="mb-4 text-blue-500 hover:underline"
       >
-        Voltar
+        ← Voltar
       </button>
-
-      <div
-        className={`border p-4 rounded ${
-          isHighlighted ? "bg-yellow-100 border-yellow-400" : ""
-        }`}
-      >
-        <img
-          src={product.image}
-          alt={product.title}
-          className="w-48 h-48 object-contain mx-auto mb-4"
-        />
-        <h1 className="text-2xl font-bold">{truncatedTitle}</h1>
-        <p className="text-gray-600">{product.category}</p>
-        <p className="mt-2">
-          Preço: <strong>${product.price}</strong>
-        </p>
-        <p className="mt-2 text-sm text-gray-500">{product.description}</p>
-
-        {product.rating && (
-          <div className="mt-2">
-            Avaliação: <strong>{product.rating.rate}</strong>{" "}
-            <span>({product.rating.count} reviews)</span>
+      {/* Box com sombra, borda arredondada e padding */}
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Imagem do produto */}
+          <div className="md:w-1/3">
+            <img
+              src={product.image}
+              alt={product.title}
+              className="w-full object-contain rounded-lg"
+            />
           </div>
-        )}
-      </div>
-
-      <div className="flex gap-2 mt-4">
-        <Link
-          href={`/products/${product.id}/edit`}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Editar
-        </Link>
-
-        <button
-          onClick={handleDelete}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-        >
-          Excluir
-        </button>
+          {/* Detalhes do produto */}
+          <div className="md:w-2/3">
+            <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
+            <p className="text-lg text-gray-700 mb-4">{product.description}</p>
+            <p className="text-xl font-semibold mb-2">
+              Preço: ${product.price.toFixed(2)}
+            </p>
+            <p className="text-sm text-gray-500 mb-6">
+              Categoria: {product.category}
+            </p>
+            <div className="flex gap-4">
+              <Button
+                variant="default"
+                onClick={() => router.push(`/products/${product.id}/edit`)}
+              >
+                Editar
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => setShowConfirm(true)}
+              >
+                Excluir
+              </Button>
+              {showConfirm && (
+                <ConfirmModal
+                  message="Você tem certeza que deseja excluir este produto?"
+                  onConfirm={() => {
+                    setShowConfirm(false);
+                    handleDelete();
+                  }}
+                  onCancel={() => setShowConfirm(false)}
+                />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

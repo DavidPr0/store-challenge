@@ -8,7 +8,15 @@ O usuário pode **listar**, **filtrar**, **ordenar**, **criar**, **editar** (sem
 
 ## Dando Início
 
-First, run the development server:
+Primeiros passos para rodar o projeto:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+Para rodar o projeto:
 
 ```bash
 npm run dev
@@ -22,7 +30,7 @@ Você pode começar a editar as páginas modificando arquivos em aplicativos/pro
 
 Este projeto usa next/font para otimizar e carregar automaticamente fontes personalizadas em seu aplicativo Next.js. Ele também integra Tailwind CSS para estilização.
 
-# Principais recursos
+## Principais recursos
 
 ```bash
 	•	Listagem de Produtos:
@@ -43,7 +51,7 @@ Este projeto usa next/font para otimizar e carregar automaticamente fontes perso
 	•	Jest + React Testing Library com cobertura mínima de 30%.
 ```
 
-# Estrutura do Projeto
+## Estrutura do Projeto
 
 ```bash
 src/
@@ -66,11 +74,13 @@ src/
 │   └─ productService.ts
 ├─ validations/
 │   └─ productValidation.ts
-├─ tests/
-│   ├─ components/
-│   │   └─ ProductCard.test.tsx
-│   └─ services/
+tests/
+│ ├─ components/
+│ │   └─ ProductCard.test.tsx
+│ └─ services/
 │       └─ productService.test.ts
+├─ utils/
+│   └─ cn.ts
 └─ ...
 
 ```
@@ -83,6 +93,12 @@ src/
     •	React Hook Form + Yup (formulários e validação)
     •	Jest + React Testing Library (testes unitários)
     •	SOLID design principles
+
+## Rodar Storybook
+
+```bash
+npm run storybook
+```
 
 ## Rodar Testes
 
